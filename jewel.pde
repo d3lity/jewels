@@ -51,7 +51,7 @@ class jewel{
       yy=0;
     }
     if (state==DROPPING) {
-      drop_yy+=2;
+      drop_yy+=1;
       if (drop_yy>50) drop_yy=50; //max dropping speed
       yy=yy+drop_yy;
       if (yy>0){

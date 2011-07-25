@@ -30,7 +30,7 @@ class anim{
     frame=0;loops=0;
     switch(type){
       case FLARE_EFFECT:
-        ttl=5;
+        ttl=20;
         break;
     }
   }
@@ -51,11 +51,12 @@ class anim{
           case 5:tint(200,120,50,255);break;
           case 6:tint(0,255,0,255);break;
         }
+        tint(255,255);
         if (j.switch_phase==5) {
           tint(255,255);
           s=10;
         }
-        image(flare,(int)(x),(int)(y),(ttl-frame+s)*30,(ttl-frame+s)*30);
+        image(flare,(int)(x),(int)(y),(ttl-frame+s)*10,(ttl-frame+s)*10);
         if (frame>ttl) kill_me=true;
         break;
     }

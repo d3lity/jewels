@@ -1,7 +1,8 @@
 import processing.opengl.*;
 
 boolean debug=false;
-PImage jew,flare;
+PImage jew[]=new PImage[210];
+PImage flare,backi;
 
 int xw=10, yw=10;
 jewel[][] level=new jewel[xw][yw+3];
@@ -11,14 +12,21 @@ score_board score=new score_board();
 boolean dropping=false,dropping_was;
 
 void setup(){
-  size(640,640,P2D);
+  size(640,640,OPENGL);
   noStroke();
  // hint(DISABLE_OPENGL_2X_SMOOTH);
   font=loadFont("f2.vlw");
   textFont(font);
-  jew=loadImage("jewels.png");
-  flare=loadImage("flare.png");
-  frameRate(35);
+  PImage jewelit=loadImage("jewels.png");
+  for (int y=0;y<14;y++)
+    for (int x=0;x<15;x++){
+      int i=y*15+x;
+      jew[i]=createImage(52,52,ARGB);
+      jew[i].copy(jewelit,x*52,y*52,52,52,0,0,52,52);
+    }
+  backi=loadImage("back.jpg");
+  flare=loadImage("ball.png");
+  frameRate(60);
   
   for(int i=0;i<xw;i++)
   for(int j=0;j<yw+2;j++)
@@ -36,7 +44,9 @@ jewel j;
 jewel mpo=null,ex_mpo=null;
 
 void draw(){
-  background(0);
+  //background(0);
+  tint(100,200);
+  image(backi,1,1);
   // === Frames Per Second ===
   //fill(255);text("fps="+floor(frameRate),0,630);
   a=(a+1)%15;
@@ -47,12 +57,13 @@ void draw(){
     if (j!=null){
 
     //j=jews[i];
-    //tint(255, 128);
+    tint(255, 255);
     if (
       mouseX>j.x && mouseX<j.x+52 && 
       mouseY>j.y && mouseY<j.y+52 
       ) {
-      blend(jew,a*52,52*2*j.type,52,52,(int)(j.x+j.xx),(int)(j.y+j.yy),52,52,ADD);
+      //blend(jew,a*52,52*2*j.type,52,52,(int)(j.x+j.xx),(int)(j.y+j.yy),52,52,ADD);
+      image(jew[j.type*30+a],(int)(j.x+j.xx),(int)(j.y+j.yy),52,52);
       if (mousePressed) {
         mpo=j;
         if (ex_mpo!=null && mpo!=ex_mpo && mpo.state==0 && ex_mpo.state==0) j._switch(ex_mpo);
@@ -62,7 +73,8 @@ void draw(){
         text(j.state,mouseX,mouseY);
       }
     }
-    else blend(jew,52,52*2*j.type,52,52,(int)(j.x+j.xx),(int)(j.y+j.yy),52,52,ADD);
+    else image(jew[j.type*30],(int)(j.x+j.xx),(int)(j.y+j.yy),52,52);
+//    blend(jew,52,52*2*j.type,52,52,(int)(j.x+j.xx),(int)(j.y+j.yy),52,52,ADD);
     //copy(jew,a*52,52*2*j.type,52,52,(int)j.x,(int)j.y,52,52);
     j.tick();
     if (debug){
@@ -82,7 +94,7 @@ void draw(){
   //if (a==0) 
   for(int i=0;i<xw;i++){
     if (level[i][0]==null&&level[i][1]==null){
-      j=new jewel(i,0,round(random(0,6))); // different jewels
+      j=new jewel(i,0,round(random(0,2))); // different jewels
       j.x=i*52;
       j.y=0;
       j.state=DROPPING;
